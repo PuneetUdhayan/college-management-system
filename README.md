@@ -39,6 +39,25 @@ To export the report in HTML:
 coverage html --omit=<environment_folder_name>/*
 ```
 
+## Docker 
+
+To build docker image
+
+```
+docker build -f Dockerfile -t college-management-api .
+```
+
+To run docker container
+
+```
+docker run -p 8000:8000 -e SQLALCHAMY_DATABASE_URL=sqlite:///./college.db college-management-api
+```
+
+Verify if API is up
+```
+http://localhost:8000/docs
+```
+
 ## To Do
 
 - Add notification system
