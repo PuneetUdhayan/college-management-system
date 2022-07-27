@@ -4,6 +4,12 @@ class StudentNotFound(Exception):
         super().__init__('No student found for the given student ID')
 
 
+class TeacherNotFound(Exception):
+
+    def __init__(self):
+        super().__init__('No teacher found for the given teacher ID')
+
+
 class CourseNotFound(Exception):
 
     def __init__(self):

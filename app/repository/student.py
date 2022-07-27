@@ -31,7 +31,7 @@ def get_students(db: Session, student_id: int = None) -> List:
     return students
 
 
-def insert_student(student_data: StudentSchema, db: Session) -> StudentDatabaseModel:
+def insert_student(student_data: CreateStudentSchema, db: Session) -> StudentDatabaseModel:
     """Insert new student into database
 
     Args:
