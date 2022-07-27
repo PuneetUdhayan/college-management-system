@@ -55,8 +55,7 @@ def remove_course(course_id: int, student_id: int, db: Session = Depends(get_db)
 
 
 @router.get('/classes')
-def get_days_classes(day: Optional[str] = None, db: Session = Depends(get_db)):
+def get_days_classes(student_id:int, day: Optional[str] = None, db: Session = Depends(get_db)):
     if not day:
         day = datetime.today().strftime('%A').upper()
-        # return student.g
-    return None
+    return student.get_days_classes(student_id=student_id, day=day, db=db)

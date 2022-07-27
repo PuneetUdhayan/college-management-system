@@ -3,9 +3,12 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from app.database.models import Student as StudentDatabaseModel
+from app.database.models import StudentCourseMap as StudentCourseMapDatabaseModel
+from app.database.models import Classes as ClassesDatabaseModel
+from app.database.models import DayOfWeek as DayOfWeekDatabaseModel
 from app.schemas import CreateStudent as CreateStudentSchema
 from app.schemas import Student as StudentSchema
-from app.repository.custom_exceptions import StudentNotFound
+from app.repository.custom_exceptions import StudentNotFound, CourseNotFound, IncorrectDayOfWeek
 
 
 def get_students(db: Session, student_id: int = None) -> List:
@@ -93,3 +96,92 @@ def remove_student(student_id: int, db: Session) -> StudentDatabaseModel:
     db.delete(student_database_model)
     db.commit()
     return student_database_model
+
+
+def add_course(course_id: int, student_id: int,db: Session):
+    """Add course for a student
+
+    Args:
+        course_id (int): Id of the course
+        student_id (int): Id of the student
+        db (Session): DB session
+
+    Returns:
+        StudentCourseDatabaseModel: Student course mapping
+    """
+    student_course = StudentCourseMapDatabaseModel(
+        course_id = course_id,
+        student_id = student_id
+    )
+    db.add(student_course)
+    db.commit()
+    db.refresh(student_course)
+    return student_course
+
+
+def remove_course(course_id: int, student_id: int, db: Session):
+    """Remove course for a student
+
+    Args:
+        course_id (int): Course ID
+        student_id (int): Student ID
+        db (Session): Database session
+
+    Raises:
+        CourseNotFound: Exception raised of student course mapping does not exist
+
+    Returns:
+        StudentCourseDatabaseModel: Student course mapping
+    """
+    student_course = db.query(StudentCourseMapDatabaseModel).\
+        filter(
+            StudentCourseMapDatabaseModel.course_id == course_id, 
+            StudentCourseMapDatabaseModel.student_id == student_id
+        ).first()
+    if not student_course:
+        raise CourseNotFound()
+    db.delete(student_course)
+    db.commit()
+    return student_course
+
+
+def get_day_id(day:str, db:Session) -> id:
+    """Get ID for the given day of week
+
+    Args:
+        day (str): Day of the week
+        db (Session): Database session
+
+    Raises:
+        IncorrectDayOfWeek: Raises exception when no entry if found for the given day
+
+    Returns:
+        int: Day ID
+    """
+    day_of_week = db.query(DayOfWeekDatabaseModel).filter(DayOfWeekDatabaseModel.name == day).first()
+    if not day_of_week:
+        raise IncorrectDayOfWeek
+    return day_of_week.id
+
+
+def get_days_classes(student_id: int, day:str, db:Session):
+    """Returns all the classes a student has for the given day
+
+    Args:
+        student_id (int): Student ID
+        day (str): Day of week in the format MONDAY, TUESDAY ... 
+        db (Session): Database Session
+    """
+    day_id = get_day_id(day=day, db=db)
+    classes = db.query(ClassesDatabaseModel).\
+                select_from(StudentCourseMapDatabaseModel).\
+                join(
+                    ClassesDatabaseModel, 
+                    StudentCourseMapDatabaseModel.course_id==ClassesDatabaseModel.course_id
+                ).\
+                filter(
+                    StudentCourseMapDatabaseModel.student_id==student_id,
+                    ClassesDatabaseModel.day_of_week == day_id
+                ).order_by(StudentCourseMapDatabaseModel.start_time).all()
+    return classes
+    

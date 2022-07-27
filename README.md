@@ -28,3 +28,9 @@ To export the report in HTML:
 ```
 coverage html --omit=<environment_folder_name>/*
 ```
+
+## To Do
+
+- Add notification system
+- Add authentication
+- Add time slot check when assigning courses to Teachers
