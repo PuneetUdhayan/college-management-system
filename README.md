@@ -2,6 +2,12 @@
 
 College management system.
 
+Note set up the environment variables required for the project by runnin the following command for windows
+
+```
+set SQLALCHAMY_DATABASE_URL=sqlite:///./college.db
+```
+
 ## Running tests
 
 Tests are written using pytest.
@@ -33,4 +39,5 @@ coverage html --omit=<environment_folder_name>/*
 
 - Add notification system
 - Add authentication
-- Add time slot check when assigning courses to Teachers
+- Add time slot check when assigning courses to students and teachers
+- Improve test coverage

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import student, teacher
+from app.routers import student, teacher, courses
 
 
 app = FastAPI(
@@ -11,3 +11,4 @@ app = FastAPI(
 
 app.include_router(student.router)
 app.include_router(teacher.router)
+app.include_router(courses.router)
