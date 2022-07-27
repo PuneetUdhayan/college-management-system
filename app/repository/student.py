@@ -5,10 +5,12 @@ from sqlalchemy.orm import Session
 from app.database.models import Student as StudentDatabaseModel
 from app.database.models import StudentCourseMap as StudentCourseMapDatabaseModel
 from app.database.models import Classes as ClassesDatabaseModel
+from app.database.models import Course as CourseDatabaseModel
 from app.schemas import CreateStudent as CreateStudentSchema
 from app.schemas import Student as StudentSchema
-from app.repository.custom_exceptions import StudentNotFound, CourseNotFound, IncorrectDayOfWeek
+from app.repository.custom_exceptions import StudentNotFound, CourseNotFound
 from app.repository.utils import get_day_id
+from app.repository.time_conversion import TimeConversions
 
 
 def get_students(db: Session, student_id: int = None) -> List:
@@ -154,15 +156,26 @@ def get_days_classes(student_id: int, day:str, db:Session):
         db (Session): Database Session
     """
     day_id = get_day_id(day=day, db=db)
-    classes = db.query(ClassesDatabaseModel).\
+    classes = db.query(ClassesDatabaseModel, CourseDatabaseModel).\
                 select_from(StudentCourseMapDatabaseModel).\
                 join(
                     ClassesDatabaseModel, 
                     StudentCourseMapDatabaseModel.course_id==ClassesDatabaseModel.course_id
                 ).\
+                join(
+                    CourseDatabaseModel,
+                    CourseDatabaseModel.id == ClassesDatabaseModel.course_id
+                ).\
                 filter(
                     StudentCourseMapDatabaseModel.student_id==student_id,
                     ClassesDatabaseModel.day_of_week == day_id
                 ).order_by(ClassesDatabaseModel.start_time).all()
-    return classes
+    classes_info = []
+    for cl, course in classes:
+        classes_info.append({
+            "start_time": TimeConversions.minutes_to_time(cl.start_time),
+            "end_time" : TimeConversions.minutes_to_time(cl.end_time),
+            "course" : course.name
+        })
+    return classes_info
     

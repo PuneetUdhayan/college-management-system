@@ -59,7 +59,7 @@ def test_update_course(set_up_env):
     assert updated_course['teacher'] == 'Teacher 1'
 
 
-def test_get_classes_for_course():
+def test_get_classes_for_course(set_up_env):
     response = client.get("/course/class", params={"course_id": 2})
     response = response.json()
     assert response[0] == {
@@ -78,7 +78,7 @@ def test_get_classes_for_course():
     }
 
 
-def test_insert_class_for_course():
+def test_insert_class_for_course(set_up_env):
     new_class = {
         "day_of_week": "WEDNESDAY",
         "start_time": "9:30",
@@ -94,13 +94,13 @@ def test_insert_class_for_course():
     }
 
 
-def test_remove_class_for_course():
+def test_remove_class_for_course(set_up_env):
     response = client.delete("/course/class", params={"class_id": 4})
     response = client.get("/course/class", params={"course_id": 2})
     assert len(response.json()) == 2
 
 
-def test_remove_course():
+def test_remove_course(set_up_env):
     response = client.delete("/course/", params={"course_id": 2})
     response = client.get("/course/", params={"course_id": 2})
     assert response.json() == []
