@@ -8,6 +8,10 @@ Note set up the environment variables required for the project by runnin the fol
 set SQLALCHAMY_DATABASE_URL=sqlite:///./college.db
 ```
 
+## Documentation
+
+Swagger documentation can be found at the /docs endpoint
+
 ## Running tests
 
 Tests are written using pytest.
@@ -33,6 +37,25 @@ To export the report in HTML:
 
 ```
 coverage html --omit=<environment_folder_name>/*
+```
+
+## Docker 
+
+To build docker image
+
+```
+docker build -f Dockerfile -t college-management-api .
+```
+
+To run docker container
+
+```
+docker run -p 8000:8000 -e SQLALCHAMY_DATABASE_URL=sqlite:///./college.db college-management-api
+```
+
+Verify if API is up
+```
+http://localhost:8000/docs
 ```
 
 ## To Do
