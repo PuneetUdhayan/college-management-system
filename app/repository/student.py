@@ -90,7 +90,7 @@ def remove_student(student_id: int, db: Session) -> StudentDatabaseModel:
     """
     student_database_model = db.query(StudentDatabaseModel).\
         filter(StudentDatabaseModel.id == student_id).\
-        all()
+        first()
     if not student_database_model:
         raise StudentNotFound()
     db.delete(student_database_model)

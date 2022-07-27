@@ -87,7 +87,7 @@ def remove_teacher(teacher_id: int, db: Session) -> TeacherDatabaseModel:
     """
     teacher_database_model = db.query(TeacherDatabaseModel).\
         filter(TeacherDatabaseModel.id == teacher_id).\
-        all()
+        first()
     if not teacher_database_model:
         raise TeacherNotFound()
     db.delete(teacher_database_model)
