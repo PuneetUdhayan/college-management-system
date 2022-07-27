@@ -8,6 +8,12 @@ Note set up the environment variables required for the project by runnin the fol
 set SQLALCHAMY_DATABASE_URL=sqlite:///./college.db
 ```
 
+To run the application on local 
+
+```
+uvicorn app.main:app --reload
+```
+
 ## Documentation
 
 Swagger documentation can be found at the /docs endpoint
