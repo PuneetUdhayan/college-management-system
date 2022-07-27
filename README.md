@@ -39,4 +39,5 @@ coverage html --omit=<environment_folder_name>/*
 
 - Add notification system
 - Add authentication
-- Add time slot check when assigning courses to Teachers
+- Add time slot check when assigning courses to students and teachers
+- Improve test coverage
