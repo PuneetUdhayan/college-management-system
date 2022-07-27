@@ -8,6 +8,10 @@ Note set up the environment variables required for the project by runnin the fol
 set SQLALCHAMY_DATABASE_URL=sqlite:///./college.db
 ```
 
+## Documentation
+
+Swagger documentation can be found at the /docs endpoint
+
 ## Running tests
 
 Tests are written using pytest.
