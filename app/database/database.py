@@ -16,6 +16,7 @@ Base = declarative_base()
 def get_db():
     db = SessionLocal()
     try:
+        db.execute('pragma foreign_keys=on')
         yield db
     finally:
         db.close()

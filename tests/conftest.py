@@ -37,5 +37,6 @@ def set_up_env():
     db.add(models.Teacher(name="Teacher 1", email="teacher1@gmail.com"))
     db.add(models.Course(name="Course 1", teacher_id = 1))
     db.add(models.Classes(day_of_week=1, course_id = 1, start_time = 390, end_time=490))
+    db.add(models.StudentCourseMap(course_id = 1, student_id = 1))
 
     db.commit()
