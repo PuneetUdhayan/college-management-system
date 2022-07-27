@@ -16,6 +16,12 @@ class CourseNotFound(Exception):
         super().__init__('Course not found for the given inputs')
 
 
+class ClassNotFound(Exception):
+
+    def __init__(self):
+        super().__init__('Class not found for the given inputs')
+
+
 class IncorrectDayOfWeek(Exception):
 
     def __init__(self):

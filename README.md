@@ -2,6 +2,12 @@
 
 College management system.
 
+Note set up the environment variables required for the project by runnin the following command for windows
+
+```
+set SQLALCHAMY_DATABASE_URL=sqlite:///./college.db
+```
+
 ## Running tests
 
 Tests are written using pytest.

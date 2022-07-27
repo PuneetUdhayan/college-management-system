@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app.database.database import get_db
 from app.repository import student
 from app.schemas import CreateStudent, Student
-from app.repository.custom_exceptions import StudentNotFound
+from app.repository.custom_exceptions import CourseNotFound, StudentNotFound
 
 
 router = APIRouter(
@@ -46,12 +46,16 @@ def remove_student(student_id: int, db: Session = Depends(get_db)):
 
 @router.put('/add-course')
 def add_course(course_id: int, student_id: int,db: Session = Depends(get_db)):
-    pass
+    return student.add_course(course_id=course_id, student_id=student_id, db=db)
 
 
 @router.put('/remove-course')
 def remove_course(course_id: int, student_id: int, db: Session = Depends(get_db)):
-    pass
+    try:
+        return student.remove_course(course_id=course_id, student_id=student_id, db=db)
+    except CourseNotFound as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=str(e))
 
 
 @router.get('/classes')

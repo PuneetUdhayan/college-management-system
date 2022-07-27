@@ -5,10 +5,10 @@ from sqlalchemy.orm import Session
 from app.database.models import Student as StudentDatabaseModel
 from app.database.models import StudentCourseMap as StudentCourseMapDatabaseModel
 from app.database.models import Classes as ClassesDatabaseModel
-from app.database.models import DayOfWeek as DayOfWeekDatabaseModel
 from app.schemas import CreateStudent as CreateStudentSchema
 from app.schemas import Student as StudentSchema
 from app.repository.custom_exceptions import StudentNotFound, CourseNotFound, IncorrectDayOfWeek
+from app.repository.utils import get_day_id
 
 
 def get_students(db: Session, student_id: int = None) -> List:
@@ -145,25 +145,6 @@ def remove_course(course_id: int, student_id: int, db: Session):
     return student_course
 
 
-def get_day_id(day:str, db:Session) -> id:
-    """Get ID for the given day of week
-
-    Args:
-        day (str): Day of the week
-        db (Session): Database session
-
-    Raises:
-        IncorrectDayOfWeek: Raises exception when no entry if found for the given day
-
-    Returns:
-        int: Day ID
-    """
-    day_of_week = db.query(DayOfWeekDatabaseModel).filter(DayOfWeekDatabaseModel.name == day).first()
-    if not day_of_week:
-        raise IncorrectDayOfWeek
-    return day_of_week.id
-
-
 def get_days_classes(student_id: int, day:str, db:Session):
     """Returns all the classes a student has for the given day
 
@@ -182,6 +163,6 @@ def get_days_classes(student_id: int, day:str, db:Session):
                 filter(
                     StudentCourseMapDatabaseModel.student_id==student_id,
                     ClassesDatabaseModel.day_of_week == day_id
-                ).order_by(StudentCourseMapDatabaseModel.start_time).all()
+                ).order_by(ClassesDatabaseModel.start_time).all()
     return classes
     
