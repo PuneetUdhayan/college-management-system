@@ -31,7 +31,7 @@ def get_students(db: Session, student_id: int = None) -> List:
     return students
 
 
-def insert_student(student_data: StudentSchema, db: Session) -> StudentDatabaseModel:
+def insert_student(student_data: CreateStudentSchema, db: Session) -> StudentDatabaseModel:
     """Insert new student into database
 
     Args:
@@ -90,7 +90,7 @@ def remove_student(student_id: int, db: Session) -> StudentDatabaseModel:
     """
     student_database_model = db.query(StudentDatabaseModel).\
         filter(StudentDatabaseModel.id == student_id).\
-        all()
+        first()
     if not student_database_model:
         raise StudentNotFound()
     db.delete(student_database_model)

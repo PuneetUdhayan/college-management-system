@@ -1,9 +1,6 @@
-from typing import Union
-
 from fastapi import FastAPI
-from pydantic import BaseModel
 
-from app.routers import student
+from app.routers import student, teacher
 
 
 app = FastAPI(
@@ -13,3 +10,4 @@ app = FastAPI(
 )
 
 app.include_router(student.router)
+app.include_router(teacher.router)
